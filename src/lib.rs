@@ -86,5 +86,13 @@ mod tests {
             },
             "expected to reach the top of the root and fail"
         );
+
+        assert!(
+            match find_file_upwards("nonexistantpath", "fakename.rs") {
+                Err(ref e) if e.kind() == io::ErrorKind::NotFound => true,
+                _ => false,
+            },
+            "expect non-existant path to return a NotFound error."
+        );
     }
 }
