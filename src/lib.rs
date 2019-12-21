@@ -1,23 +1,24 @@
 use std::env::current_dir;
 use std::io;
 use std::path::{Path, PathBuf};
+use std::fmt::Display;
 
 pub fn find_config_toml() -> Result<(PathBuf), (io::Error)> {
     //! Walks upward from `current_dir()` looking for the first `Cargo.toml` file.
     find_file_upwards(current_dir()?, "Cargo.toml")
 }
 
-pub fn find_config_toml_from_path<P: Into<PathBuf>>(path: P) -> Result<(PathBuf), (io::Error)> {
+pub fn find_config_toml_from_path<P: AsRef<Path>>(path: P) -> Result<(PathBuf), (io::Error)> {
     //! Walks upward from the specified `path` looking for the first `Cargo.toml` file.
-    find_file_upwards(path.into(), "Cargo.toml")
+    find_file_upwards(path, "Cargo.toml")
 }
 
-pub fn find_file_upwards<P: Into<PathBuf>, S: AsRef<Path>>(
+pub fn find_file_upwards<P: AsRef<Path>, S: AsRef<Path> + Display>(
     path: P,
     file_name: S,
 ) -> Result<(PathBuf), (io::Error)> {
     //! Walks upward from `path` looking for the first file named `file_name`.
-    let path = path.into().canonicalize()?;
+    let path = path.as_ref().canonicalize()?;
 
     for current in path.ancestors() {
         let manifest = current.join(&file_name);
@@ -27,7 +28,7 @@ pub fn find_file_upwards<P: Into<PathBuf>, S: AsRef<Path>>(
     }
     Err(io::Error::new(
         io::ErrorKind::NotFound,
-        "Manifest Not Found, not a rust package",
+        format!("File Not Found: '{}'", file_name),
     ))
 }
 
