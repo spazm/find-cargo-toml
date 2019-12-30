@@ -1,15 +1,15 @@
-use find_cargo_toml::{bar, baz, Result};
+use find_cargo_toml::{read_and_deserialize, read_and_deserialize_from_path, Result};
 
 pub fn main() -> Result<()> {
-    let path = "/home/andrew/src/github/spazm/find-cargo-toml/Cargo.toml";
     let conf: Result<toml::Value> = {
         let mut buffer = String::new();
-        bar(path, &mut buffer)
+        read_and_deserialize(&mut buffer)
     };
     println!("conf: {:?}", conf);
     let conf: Result<toml::Value> = {
+        let path = "src/";
         let mut buffer = String::new();
-        baz(&mut buffer)
+        read_and_deserialize_from_path(path, &mut buffer)
     };
     println!("conf: {:?}", conf);
     Ok(())
