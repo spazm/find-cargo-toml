@@ -97,7 +97,6 @@ where T: Deserialize<'a>
     toml::from_str::<T>(buffer).map_err(|e| e.into())
 }
 
-
 pub fn toml_from_path<'a, P>(path: P, buffer: &mut String) -> Result<String>
 where
     P: AsRef<Path>,
@@ -130,10 +129,6 @@ where
     conf
 }
 */
-
-/////
-//pub fn config_toml_from_path<'a, T, P>(path: P) -> Result<T, Box<dyn Error + 'static>>
-//pub fn config_toml_from_path<'a, T, P>(path: P) -> BoxResult<T>
 
 /*
 pub fn config_toml_from_path<'a, T, P>(path: P, buffer: &'a str) -> Result<T>
