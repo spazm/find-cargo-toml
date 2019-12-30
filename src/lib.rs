@@ -27,21 +27,6 @@ pub use error::*;
 
 /////
 
-pub fn main() -> Result<()> {
-    let path = "Cargo.toml";
-    let _conf: Result<toml::Value> = {
-        let mut buffer = String::new();
-        bar(path, &mut buffer)
-    };
-    let conf: Result<toml::Value> = {
-        let mut buffer = String::new();
-        baz(&mut buffer)
-    };
-    println!("conf: {:?}", conf);
-    Ok(())
-}
-
-//pub fn bar<'a, T, P>(path: P, mut buffer: &'a mut std::string::String) -> Result<T>
 pub fn bar<'a, T, P>(path: P, buffer: &'a mut String) -> Result<T>
 where
     T: Deserialize<'a> + std::fmt::Debug,
