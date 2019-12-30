@@ -1,14 +1,10 @@
-use std::env::current_dir;
-use std::io;
-//use std::io::prelude::*;
-//use std::fs::File;
-use std::fs;
-use std::path::{Path, PathBuf};
-use std::fmt::Display;
-//use std::error::Error;
 use serde::Deserialize;
+use std::env::current_dir;
+use std::fmt::Display;
+use std::fs;
+use std::io;
+use std::path::{Path, PathBuf};
 use toml;
-// use toml::de;
 
 #[macro_use]
 extern crate error_chain;
@@ -19,13 +15,10 @@ mod error {
             Io(::std::io::Error);
             Toml(::toml::de::Error);
         }
-
     }
 }
 
 pub use error::*;
-
-/////
 
 pub fn bar<'a, T, P>(path: P, buffer: &'a mut String) -> Result<T>
 where
@@ -74,7 +67,7 @@ where
     toml::from_str::<T>(&buffer).map_err(|e| e.into())
 }
 
-pub fn conf_from_path_direct<P>(path: P) -> Result<(String)>
+pub fn conf_from_path_direct<P>(path: P) -> Result<String>
 where
     P: AsRef<Path> + std::fmt::Debug,
 {
