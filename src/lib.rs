@@ -32,28 +32,20 @@ where
     T: Deserialize<'a> + std::fmt::Debug,
     P: AsRef<Path> + std::fmt::Debug,
 {
-        // conf_from_path(path, &mut buffer)?;
-        println!("bar.  path:{:?}", path);
+        // We store the result into *buffer to ensure the lifetime checker knows
+        // it lives long enough for the toml decode.
         *buffer = conf_from_path_direct(path)?;
         config_toml_string(buffer)
 }
 
-/*
-pub fn baz<'a, T>(mut buffer: &'a mut String) -> Result<T>
-where
-    T: Deserialize<'a> + std::fmt::Debug,
-{
-        let path = "Cargo.toml";
-        conf_from_path(path, &mut buffer)?;
-        config_toml_string(buffer)
-}
-*/
 pub fn baz<'a, T>(buffer: &'a mut String) -> Result<T>
 where
     T: Deserialize<'a> + std::fmt::Debug,
 {
-        let path = "./Cargo.toml";
-        // conf_from_path(path, &mut buffer)?;
+        let path = "Cargo.toml";
+
+        // We store the result into *buffer to ensure the lifetime checker knows
+        // it lives long enough for the toml decode.
         *buffer = conf_from_path_direct(path)?;
         config_toml_string(buffer)
 }
@@ -82,14 +74,12 @@ where
     toml::from_str::<T>(&buffer).map_err(|e| e.into())
 }
 
-/// Reads
-pub fn conf_from_path<'a, P>(path: P, buffer: &mut String) -> Result<()>
+pub fn conf_from_path_direct<P>(path: P) -> Result<(String)>
 where
-    P: AsRef<Path>,
+    P: AsRef<Path> + std::fmt::Debug,
 {
-    let tmp : Result<String>= fs::read_to_string(path).map_err(|e| e.into());
-    let b = tmp?;
-    *buffer = b;
+    fs::read_to_string(path).map_err(|e| e.into())
+}
 
     Ok(())
 }
