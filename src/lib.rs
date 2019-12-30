@@ -113,17 +113,9 @@ pub fn conf_from_path_direct<'a, P>(path: P) -> Result<(String)>
 where
     P: AsRef<Path> + std::fmt::Debug,
 {
-    println!("conf_from_path_direct path:{:?}", path);
     //let tmp : Result<String>= fs::read_to_string(path).map_err(|e| e.into());
-    let tmp = fs::read_to_string(path);
-    println!("tmp result: {:?}", tmp);
-    let tmp : Result<String> = tmp.map_err(|e| e.into());
-    return tmp;
-    /*
-    let b = tmp?;
-    *buffer = b;
-    */
-
+    //return tmp;
+    fs::read_to_string(path).map_err(|e| e.into())
 }
 
 pub fn toml_from_path<'a, P>(path: P, buffer: &mut String) -> Result<String>
