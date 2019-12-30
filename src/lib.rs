@@ -78,6 +78,8 @@ pub fn read_and_deserialize_from_path<'a, P, T>(path: P, buffer: &'a mut String 
 where P: AsRef<Path> + std::fmt::Debug,
       T: Deserialize<'a>
 {
+    let path = find_config_toml_from_path(path)?;
+    println!("p: {:?}", path);
     *buffer = fs::read_to_string(path)?;
     toml::from_str::<T>(buffer).map_err(|e| e.into())
 }
@@ -85,7 +87,7 @@ where P: AsRef<Path> + std::fmt::Debug,
 pub fn read_and_deserialize<'a, T>(buffer: &'a mut String ) -> Result<T>
 where T: Deserialize<'a>
 {
-    let path = "./Cargo.toml";
+    let path = find_config_toml()?;
     *buffer = fs::read_to_string(path)?;
     toml::from_str::<T>(buffer).map_err(|e| e.into())
 }
