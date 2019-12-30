@@ -81,17 +81,22 @@ where
     fs::read_to_string(path).map_err(|e| e.into())
 }
 
-    Ok(())
+pub fn read_and_deserialize_from_path<'a, P, T>(path: P, buffer: &'a mut String ) -> Result<T>
+where P: AsRef<Path> + std::fmt::Debug,
+      T: Deserialize<'a>
+{
+    *buffer = fs::read_to_string(path)?;
+    toml::from_str::<T>(buffer).map_err(|e| e.into())
 }
 
-pub fn conf_from_path_direct<'a, P>(path: P) -> Result<(String)>
-where
-    P: AsRef<Path> + std::fmt::Debug,
+pub fn read_and_deserialize<'a, T>(buffer: &'a mut String ) -> Result<T>
+where T: Deserialize<'a>
 {
-    //let tmp : Result<String>= fs::read_to_string(path).map_err(|e| e.into());
-    //return tmp;
-    fs::read_to_string(path).map_err(|e| e.into())
+    let path = "./Cargo.toml";
+    *buffer = fs::read_to_string(path)?;
+    toml::from_str::<T>(buffer).map_err(|e| e.into())
 }
+
 
 pub fn toml_from_path<'a, P>(path: P, buffer: &mut String) -> Result<String>
 where
